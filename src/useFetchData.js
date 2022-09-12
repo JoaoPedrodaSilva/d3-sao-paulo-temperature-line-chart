@@ -8,12 +8,12 @@ export const useFetchData = () => {
     useEffect(() => {
         const preliminaryData = []
 
-        csv("https://gist.githubusercontent.com/JoaoPedrodaSilva/45aa586e7d221d66e40ecf9647d16c59/raw/03ca52191fad89678ce48019aa588eefd6e22977/sao-paulo-temperature")
+        csv("https://gist.githubusercontent.com/JoaoPedrodaSilva/45aa586e7d221d66e40ecf9647d16c59/raw/2a0ae797c3bf959a90bf74e377fa79cb44d245cf/sao-paulo-temperature")
             .then(response => {
                 response.map(row => (
                     preliminaryData.push(
                         {
-                            date: Date(row.date),
+                            date: new Date(row.date),
                             temperature: {
                                 max: Number(row.maximum),
                                 mean: Number(row.mean),
