@@ -1,8 +1,8 @@
-import { scaleLinear, scaleTime, extent, timeFormat, format } from "d3"
+import { scaleLinear, extent, timeFormat, format, min, max } from "d3"
 import { useDataContext } from "./dataContext"
 import { useFetchData } from "./useFetchData"
-import { Title } from "./components/Title"
 
+import { Title } from "./components/Title"
 import { AxisBottom } from "./components/AxisBottom"
 // import { LabelBottom } from "./components/LabelBottom"
 import { AxisLeft } from "./components/AxisLeft"
@@ -21,7 +21,8 @@ export const App = () => {
     const innerHeight = height - margin.top - margin.bottom
 
     const xAccessor = d => d.date
-    const yAccessor = d => d.temperature.mean
+    const yAccessorMinTemp = d => d.temperature.min
+    const yAccessorMaxTemp = d => d.temperature.max
 
     const xAccessorTickFormat = timeFormat("%b %d")
     const yAccessorTickFormat = format(".0f")
@@ -44,7 +45,7 @@ export const App = () => {
         .nice()
 
     const yScale = scaleLinear()
-        .domain(extent(data, yAccessor))
+        .domain([min(data, yAccessorMinTemp), max(data, yAccessorMaxTemp)])
         .range([innerHeight, 0])
         .nice()
 
@@ -57,7 +58,6 @@ export const App = () => {
                 viewBox={`0 0 ${width} ${height}`}
             >
                 <g transform={`translate(${margin.left}, ${margin.top})`}>
-                    {/* {console.log((yAccessor(data[0]).max))} */}
                     <Title />
 
                     <AxisBottom
@@ -78,7 +78,8 @@ export const App = () => {
                         xScale={xScale}
                         yScale={yScale}
                         xAccessor={xAccessor}
-                        yAccessor={yAccessor}
+                        yAccessorMinTemp={yAccessorMinTemp}
+                        yAccessorMaxTemp={yAccessorMaxTemp}                        
                         xAccessorTickFormat={xAccessorTickFormat}
                         yAccessorTickFormat={yAccessorTickFormat}
                     />
